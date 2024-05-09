@@ -67,6 +67,10 @@ int main() {
                 cout << "Objetivo " << j + 1 << " destruido por el ca" << character164 << "on " << canonLetter << " en "
                      << round(timeY2) << " segundos." << endl;
             }
+            if (actualTargetX == initialPositionX&&actualTargetY==initialPositionY){
+                cout<<"ca"<<character164<<"on destruido";
+                break;
+            }
             if (xWhenY2){}
 
         }
