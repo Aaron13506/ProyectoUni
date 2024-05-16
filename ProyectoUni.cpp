@@ -6,7 +6,6 @@
 #include "cstdlib"
 
 using namespace std;
-int Objective(int a, int b){ return a + b;}
 int main() {
     const double PI = M_PI; //Constante PI
     const double GRAVITY = -9.81; //Constante gravedad
@@ -15,8 +14,8 @@ int main() {
     double timeInAir; //Luego se calcula cuanto tarda en caer el suelo según la altura inicial(Funcionando)
     cin >> cannonQty;
     int canonID = 65;
-    char canonLetter = static_cast<char>(canonID);
     for (int i = 0; i < cannonQty; ++i) {
+        char canonLetter = static_cast<char>(canonID);
         cin >> initialPositionX >> initialPositionY;
         cin >> initialSpeed >> actualAngle;
         double senoAngle = sin(actualAngle * PI / 180); //Numero convertido a radianes para calcular seno(Funcionando)
@@ -53,24 +52,52 @@ int main() {
                                    initialPositionX); //Indica donde se encuentra el proyectil en el eje X cuando pasa por el eje Y indicado
             double xWhenY2 = round((initialSpeed * (timeY2) * cosAngle) +
                                    initialPositionX);
+            if (actualTargetX == initialPositionX&&actualTargetY==initialPositionY){
+                cout<<endl <<"Ca"<<character164<<"on destruido";
+                break;
+            }
+            if (actualTargetX==initialPositionX&&actualTargetY<initialPositionY){
+                cout<<"Enemigos en las murallas";
+                continue;
+            }
+            if (actualTargetX<initialPositionX){
+                cout<<"Posicion comprometida";
+                continue;
+            }
             if (xWhenY1 == actualTargetX) {
                 cout<<endl << "Objetivo " << j + 1 << " destruido por el ca" << character164 << "on " << canonLetter << " en "
                      << round(timeY) << " segundos." << endl;
             } else if (xWhenY2 == actualTargetX) {
                 cout<<endl << "Objetivo " << j + 1 << " destruido por el ca" << character164 << "on " << canonLetter << " en "
                      << round(timeY2) << " segundos." << endl;
+            }else {
+                for (int k = 0; k < 181; ++k) {
+                    double cosNewAngle = cos(k * PI / 180);
+                    double senoNewAngle = sin(k * PI / 180);
+                    double senoNewAngleSquare = pow(senoNewAngle, 2); //Cuadrado del seno(Funcionando)
+                    double newTimeY = (-initialSpeed * senoNewAngle + sqrt(
+                            (pow(initialSpeed, 2) * senoNewAngleSquare + 2 * GRAVITY * (actualTargetY - initialPositionY)))) /
+                                   GRAVITY;//(Funcionando)
+                    double newTimeY2 = -(
+                            (initialSpeedY + sqrt(pow(initialSpeedY, 2) + 2 * GRAVITY * (actualTargetY - initialPositionY))) /
+                            GRAVITY);
+                    double xWhenNewY1 = round((initialSpeed * (newTimeY) * cosNewAngle) +
+                                           initialPositionX); //Indica donde se encuentra el proyectil en el eje X cuando pasa por el eje Y indicado
+                    double xWhenNewY2 = round((initialSpeed * (newTimeY2) * cosNewAngle) +
+                                           initialPositionX);
+                    if (xWhenNewY1 == actualTargetX||xWhenNewY2 == actualTargetX) {
+                     int movedGrades = abs(actualAngle-k);
+                        cout<<endl << "Reajuste de"<<movedGrades<<" grados requerido en el cañon "<<canonLetter<<endl;
+                    }
+
+                }
             }
-            if (actualTargetX == initialPositionX&&actualTargetY==initialPositionY){
-                cout<<endl <<"ca"<<character164<<"on destruido";
-                break;
-            }
-            if (xWhenY2){}
+
+
 
         }
-        canonID++;
+        (canonID++);
     }
-
-
 
     return 0;
 }
