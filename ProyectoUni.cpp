@@ -10,7 +10,7 @@ using namespace std;
 int main() {
     const double PI = M_PI; //Constante PI
     const double GRAVITY = -9.81; //Constante gravedad
-    const char character164 = static_cast<char>(164);
+    const char character164 = static_cast<char>(164); //Permite colocar la letra
     string char164(1,character164);
     std::string finalResult;
     int initialPositionX, initialPositionY, initialSpeed, actualAngle, objectiveQty, actualTargetX, actualTargetY, cannonQty;
@@ -81,15 +81,21 @@ int roundedHeight = static_cast<int>(round(maxHeight));
                         "\nObjetivo " + std::to_string(j + 1) + " destruido por el ca" + char164 +
                         "on " + canonString + " en "
                         + stringTimeY + " segundos.\n";
+                continue;
             } else if (xWhenY2 == actualTargetX) {
                 finalResult +=
                         "\nObjetivo " + std::to_string(j + 1) + " destruido por el ca" + char164 +
                         "on " + canonString + " en "
                         + stringTimeY2 + " segundos.\n";
+                continue;
             } else {
-                for (int k = 0; k < 181; ++k) {
-                    double cosNewAngle = cos(k * PI / 180);
-                    double senoNewAngle = sin(k * PI / 180);
+                for (int k = 0; k <= 1800; ++k) {
+                    double allTheAngles = k/10;
+
+               /*     cout<<allTheAngles<<endl;*/
+                    double cosNewAngle = cos
+                            (allTheAngles * PI / 180);
+                    double senoNewAngle = sin(allTheAngles * PI / 180);
                     double senoNewAngleSquare = pow(senoNewAngle, 2); //Cuadrado del seno(Funcionando)
                     double newTimeY = (-initialSpeed * senoNewAngle + sqrt(
                             (pow(initialSpeed, 2) * senoNewAngleSquare +
@@ -104,12 +110,14 @@ int roundedHeight = static_cast<int>(round(maxHeight));
                     double xWhenNewY2 = round((initialSpeed * (newTimeY2) * cosNewAngle) +
                                               initialPositionX);
                     if (xWhenNewY1 == actualTargetX || xWhenNewY2 == actualTargetX) {
-                        int movedGrades = round(abs(actualAngle - k));
+                        int movedGrades = round(abs(actualAngle - allTheAngles));
                         string stringGrades = std::to_string(movedGrades);
-                       finalResult+="\nReajuste de " + stringGrades + " grados requerido en el ca"+char164+"on " + canonString;
+                       finalResult+="\nReajuste de " + stringGrades + " grados requerido en el ca"+char164+"on " + canonString+"\n";
+                        break;
                     }
 
                 }
+                continue;
             }
 
 
