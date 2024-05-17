@@ -11,7 +11,7 @@ int main() {
     const double PI = M_PI; //Constante PI
     const double GRAVITY = -9.81; //Constante gravedad
     const char character164 = static_cast<char>(164); //Permite colocar la letra
-    string char164(1,character164);
+    string char164(1, character164);
     std::string finalResult;
     int initialPositionX, initialPositionY, initialSpeed, actualAngle, objectiveQty, actualTargetX, actualTargetY, cannonQty;
     double timeInAir; //Luego se calcula cuanto tarda en caer el suelo según la altura inicial(Funcionando)
@@ -19,7 +19,7 @@ int main() {
     int canonID = 65;
     for (int i = 0; i < cannonQty; ++i) {
         char canonLetter = static_cast<char>(canonID);
-        string canonString(1,canonLetter);
+        string canonString(1, canonLetter);
         cin >> initialPositionX >> initialPositionY;
         cin >> initialSpeed >> actualAngle;
         double senoAngle = sin(actualAngle * PI / 180); //Numero convertido a radianes para calcular seno(Funcionando)
@@ -29,8 +29,8 @@ int main() {
         double initialSpeedY = initialSpeed * senoAngle; //Velocidad inicial Y  Vo*Sen(a) (Funcionando)
         double initialSpeedX = initialSpeed * cosAngle; // Velocidad inicial X Vo*Cos(a) (Funcionando)
         double maxHeight = -(pow(initialSpeed, 2) * (senoAngleSquare) / (2 * GRAVITY)) +
-                                 initialPositionY; //Altura maxima Vo²*Sen²(a)/2*g + Altura inicial (Funcionando)
-int roundedHeight = static_cast<int>(round(maxHeight));
+                           initialPositionY; //Altura maxima Vo²*Sen²(a)/2*g + Altura inicial (Funcionando)
+        int roundedHeight = static_cast<int>(round(maxHeight));
         string stringHeight = std::to_string(roundedHeight);
         if (initialPositionY == 0) { //Las fórmulas difieren si la posición inicial de Y es 0 o no
             timeInAir = ((2 * initialSpeed) * senoAngle /
@@ -43,7 +43,8 @@ int roundedHeight = static_cast<int>(round(maxHeight));
         }
         int roundedTimeInAir = static_cast<int>(round(timeInAir));
         string stringTimeInAir = std::to_string(roundedTimeInAir);
-        finalResult +="\nLos proyectiles del ca" + char164 + "on " + canonString + " subiran hasta " + stringHeight + " metros antes de comenzar a caer.\n";
+        finalResult += "\nLos proyectiles del ca" + char164 + "on " + canonString + " subiran hasta " + stringHeight +
+                       " metros antes de comenzar a caer.\n";
         finalResult += "Estos impactaran contra el suelo pasados " + stringTimeInAir +
                        " segundos luego de ser disparados.\n";
         cin >> objectiveQty;
@@ -64,15 +65,24 @@ int roundedHeight = static_cast<int>(round(maxHeight));
                                    initialPositionX); //Indica donde se encuentra el proyectil en el eje X cuando pasa por el eje Y indicado
             double xWhenY2 = round((initialSpeed * (timeY2) * cosAngle) +
                                    initialPositionX);
+            if (initialPositionY > 50 || initialSpeed > 500 || cannonQty > 26 || actualAngle > 180) {
+                cout << "Datos de entrada invalidos";
+
+                return 0;
+
+            }
             if (actualTargetX == initialPositionX && actualTargetY == initialPositionY) {
                 finalResult += "\nCa" + char164 + "on destruido";
+
                 break;
             }
             if (actualTargetX == initialPositionX && actualTargetY < initialPositionY) {
                 finalResult += "\nEnemigos en las murallas";
+
                 continue;
             }
-            if (actualTargetX < initialPositionX) {
+            if ((actualTargetX > initialPositionX && actualAngle > 90) ||
+                (actualTargetX < initialPositionX && actualAngle < 90)) {
                 finalResult += "\nPosicion comprometida";
                 continue;
             }
@@ -90,9 +100,7 @@ int roundedHeight = static_cast<int>(round(maxHeight));
                 continue;
             } else {
                 for (int k = 0; k <= 1800; ++k) {
-                    double allTheAngles = k/10;
-
-               /*     cout<<allTheAngles<<endl;*/
+                    double allTheAngles = k / 10;
                     double cosNewAngle = cos
                             (allTheAngles * PI / 180);
                     double senoNewAngle = sin(allTheAngles * PI / 180);
@@ -112,8 +120,11 @@ int roundedHeight = static_cast<int>(round(maxHeight));
                     if (xWhenNewY1 == actualTargetX || xWhenNewY2 == actualTargetX) {
                         int movedGrades = round(abs(actualAngle - allTheAngles));
                         string stringGrades = std::to_string(movedGrades);
-                       finalResult+="\nReajuste de " + stringGrades + " grados requerido en el ca"+char164+"on " + canonString+"\n";
+                        finalResult +=
+                                "\nReajuste de " + stringGrades + " grados requerido en el ca" + char164 + "on " +
+                                canonString + "\n";
                         break;
+
                     }
 
                 }
@@ -125,7 +136,8 @@ int roundedHeight = static_cast<int>(round(maxHeight));
         (canonID++);
     }
 
-cout<<finalResult;
-    cout<<endl;
+    cout << finalResult;
+    cout << endl << endl;
+    system("pause");
     return 0;
 }
