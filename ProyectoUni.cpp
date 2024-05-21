@@ -12,7 +12,7 @@ int main() {
     const double GRAVITY = -9.81; //Constante gravedad
     const char character164 = static_cast<char>(164); //Permite colocar la letra
     string char164(1, character164);
-    std::string finalResult;
+    string finalResult;
     int initialPositionX, initialPositionY, initialSpeed, actualAngle, objectiveQty, actualTargetX, actualTargetY, cannonQty;
     double timeInAir; //Luego se calcula cuanto tarda en caer el suelo según la altura inicial(Funcionando)
     cin >> cannonQty;
@@ -31,7 +31,7 @@ int main() {
         double maxHeight = -(pow(initialSpeed, 2) * (senoAngleSquare) / (2 * GRAVITY)) +
                            initialPositionY; //Altura maxima Vo²*Sen²(a)/2*g + Altura inicial (Funcionando)
         int roundedHeight = static_cast<int>(round(maxHeight));
-        string stringHeight = std::to_string(roundedHeight);
+        string stringHeight = to_string(roundedHeight);
         if (initialPositionY == 0) { //Las fórmulas difieren si la posición inicial de Y es 0 o no
             timeInAir = ((2 * initialSpeed) * senoAngle /
                          -GRAVITY); //Tiempo de vuelo si la altura es 0  Vo*Sen(a)/g (Funcionando)
@@ -42,11 +42,17 @@ int main() {
                         -GRAVITY; //  (Funcionando)
         }
         int roundedTimeInAir = static_cast<int>(round(timeInAir));
-        string stringTimeInAir = std::to_string(roundedTimeInAir);
-        finalResult += "\nLos proyectiles del ca" + char164 + "on " + canonString + " subiran hasta " + stringHeight +
-                       " metros antes de comenzar a caer.\n";
-        finalResult += "Estos impactaran contra el suelo pasados " + stringTimeInAir +
-                       " segundos luego de ser disparados.\n";
+        string stringTimeInAir = to_string(roundedTimeInAir);
+        finalResult.append("\nLos proyectiles del ca")
+        .append(char164)
+        .append("on ")
+        .append(canonString)
+        .append(" subiran hasta ")
+        .append(stringHeight)
+        .append(" metros antes de comenzar a caer.\n")
+        .append("Estos impactaran contra el suelo pasados ")
+        .append(stringTimeInAir)
+        .append(" segundos luego de ser disparados.\n");
         cin >> objectiveQty;
         for (int j = 0; j < objectiveQty; ++j) {
             cin >> actualTargetX >> actualTargetY;
@@ -54,12 +60,12 @@ int main() {
                     (pow(initialSpeed, 2) * senoAngleSquare + 2 * GRAVITY * (actualTargetY - initialPositionY)))) /
                            GRAVITY;//(Funcionando)
             int roundedTimeY = static_cast<int>(round(timeY));
-            string stringTimeY = std::to_string(roundedTimeY);
+            string stringTimeY = to_string(roundedTimeY);
             double timeY2 = -(
                     (initialSpeedY + sqrt(pow(initialSpeedY, 2) + 2 * GRAVITY * (actualTargetY - initialPositionY))) /
                     GRAVITY);
             int roundedTimeY2 = static_cast<int>(round(timeY2));
-            string stringTimeY2 = std::to_string(roundedTimeY2);
+            string stringTimeY2 = to_string(roundedTimeY2);
 
             double xWhenY1 = round((initialSpeed * (timeY) * cosAngle) +
                                    initialPositionX); //Indica donde se encuentra el proyectil en el eje X cuando pasa por el eje Y indicado
@@ -72,35 +78,48 @@ int main() {
 
             }
             if (actualTargetX == initialPositionX && actualTargetY == initialPositionY) {
-                finalResult += "\nCa" + char164 + "on destruido";
+                finalResult.append("\nCa")
+                .append(char164)
+                .append("on destruido");
 
                 break;
             }
             if (actualTargetX == initialPositionX && actualTargetY < initialPositionY) {
-                finalResult += "\nEnemigos en las murallas";
+                finalResult.append("\nEnemigos en las murallas");
 
                 continue;
             }
             if ((actualTargetX > initialPositionX && actualAngle > 90) ||
                 (actualTargetX < initialPositionX && actualAngle < 90)) {
-                finalResult += "\nPosicion comprometida";
+                finalResult.append("\nPosicion comprometida");
                 continue;
             }
             if (xWhenY1 == actualTargetX) {
-                finalResult +=
-                        "\nObjetivo " + std::to_string(j + 1) + " destruido por el ca" + char164 +
-                        "on " + canonString + " en "
-                        + stringTimeY + " segundos.\n";
+                finalResult.append("\nObjetivo ")
+                .append(to_string(j + 1))
+                .append(" destruido por el ca")
+                .append( char164)
+                .append("on ")
+                .append(canonString)
+                .append(" en ")
+                .append(stringTimeY)
+                .append(" segundos.\n");
                 continue;
             } else if (xWhenY2 == actualTargetX) {
-                finalResult +=
-                        "\nObjetivo " + std::to_string(j + 1) + " destruido por el ca" + char164 +
-                        "on " + canonString + " en "
-                        + stringTimeY2 + " segundos.\n";
+                finalResult.append("\nObjetivo ")
+                .append(to_string(j + 1))
+                .append(" destruido por el ca")
+                .append(char164)
+                .append("on ")
+                .append(canonString)
+                .append(" en ")
+                .append(stringTimeY2)
+                .append(" segundos.\n");
                 continue;
             } else {
                 for (int k = 0; k <= 1800; ++k) {
-                    double allTheAngles = k / 10;
+                    auto doubleK = static_cast<double>(k);
+                    double allTheAngles = doubleK / 10;
                     double cosNewAngle = cos
                             (allTheAngles * PI / 180);
                     double senoNewAngle = sin(allTheAngles * PI / 180);
@@ -119,25 +138,27 @@ int main() {
                                               initialPositionX);
                     if (xWhenNewY1 == actualTargetX || xWhenNewY2 == actualTargetX) {
                         int movedGrades = round(abs(actualAngle - allTheAngles));
-                        string stringGrades = std::to_string(movedGrades);
-                        finalResult +=
-                                "\nReajuste de " + stringGrades + " grados requerido en el ca" + char164 + "on " +
-                                canonString + "\n";
+                        string stringGrades = to_string(movedGrades);
+                        finalResult.append("\nReajuste de ")
+                        .append(stringGrades)
+                        .append(" grados requerido en el ca")
+                        .append(char164)
+                        .append("on ")
+                        .append(canonString)
+                        .append("\n");
                         break;
 
                     }
 
                 }
-                continue;
             }
 
 
         }
-        (canonID++);
+        canonID++;
     }
 
     cout << finalResult;
     cout << endl << endl;
-    system("pause");
     return 0;
 }
