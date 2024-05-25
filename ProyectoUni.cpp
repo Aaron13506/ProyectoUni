@@ -8,7 +8,6 @@
 using namespace std;
 
 int main() {
-    cout << "ñ" << "Ñ";
     const double PI = M_PI; //Constante PI
     const double GRAVITY = -9.81; //Constante gravedad
     const char character164 = static_cast<char>(164); //Permite colocar la letra
@@ -28,6 +27,7 @@ int main() {
         double cosAngle = cos(actualAngle * PI / 180); //Numero convertido a radianes para calcular coseno(Funcionando)
         double senoAngleSquare = pow(senoAngle, 2); //Cuadrado del seno(Funcionando)
         double initialSpeedY = initialSpeed * senoAngle; //Velocidad inicial Y  Vo*Sen(a) (Funcionando)
+        double initialSpeedX = initialSpeed * cosAngle; // Velocidad inicial X Vo*Cos(a) (Funcionando)
         double maxHeight = -(pow(initialSpeed, 2) * (senoAngleSquare) / (2 * GRAVITY)) +
                            initialPositionY; //Altura maxima Vo²*Sen²(a)/2*g + Altura inicial (Funcionando)
         int roundedHeight = static_cast<int>(round(maxHeight));
@@ -54,9 +54,6 @@ int main() {
                 .append(stringTimeInAir)
                 .append(" segundos luego de ser disparados.\n");
         cin >> objectiveQty;
-        cout << (initialPositionY > 50) << (initialSpeed > 500) << (cannonQty > 26) << (actualAngle > 180)
-             << (cannonQty < 1)
-             << (initialSpeed < 1) << (initialPositionY < 0) << (objectiveQty < 1);
         if (initialPositionY > 50 || initialSpeed > 500 || cannonQty > 26 || actualAngle > 180 || actualAngle < 0 ||
             cannonQty < 1 ||
             initialSpeed < 1 || initialPositionY < 0 || objectiveQty < 1) {
@@ -69,21 +66,16 @@ int main() {
                 cout << "Datos de entrada invalidos";
                 return 0;
             }
-            double timeY = (-initialSpeed * senoAngle + sqrt(
-                    (pow(initialSpeed, 2) * senoAngleSquare + 2 * GRAVITY * (actualTargetY - initialPositionY)))) /
-                           GRAVITY;//(Funcionando)
-            int roundedTimeY = static_cast<int>(round(timeY));
-            string stringTimeY = to_string(roundedTimeY);
-            double timeY2 = -(
-                    (initialSpeedY + sqrt(pow(initialSpeedY, 2) + 2 * GRAVITY * (actualTargetY - initialPositionY))) /
-                    GRAVITY);
-            int roundedTimeY2 = static_cast<int>(round(timeY2));
-            string stringTimeY2 = to_string(roundedTimeY2);
+            double timeX = (actualTargetX-initialPositionX)/initialSpeedX;//(Funcionando)
+            int roundedTimeX = round(timeX);
+            string stringTimeX = to_string(roundedTimeX);
 
-            double xWhenY1 = round((initialSpeed * (timeY) * cosAngle) +
-                                   initialPositionX); //Indica donde se encuentra el proyectil en el eje X cuando pasa por el eje Y indicado
-            double xWhenY2 = round((initialSpeed * (timeY2) * cosAngle) +
-                                   initialPositionX);
+          
+
+            double yWhenX1 = round(initialPositionY+initialSpeedY*timeX -0.5 * -GRAVITY* pow(timeX,2)); //Indica donde se encuentra el proyectil en el eje X cuando pasa por el eje Y indicado
+            int roundedWhenX = static_cast<int>(yWhenX1);
+            string stringWhenX = to_string(roundedWhenX);
+
             if (actualTargetX == initialPositionX && actualTargetY == initialPositionY) {
                 finalResult.append("\nCa")
                         .append(char164)
@@ -101,7 +93,7 @@ int main() {
                 finalResult.append("\nPosicion comprometida");
                 continue;
             }
-            if (xWhenY1 == actualTargetX) {
+            if (yWhenX1 == actualTargetY) {
                 finalResult.append("\nObjetivo ")
                         .append(to_string(j + 1))
                         .append(" destruido por el ca")
@@ -109,23 +101,10 @@ int main() {
                         .append("on ")
                         .append(canonString)
                         .append(" en ")
-                        .append(stringTimeY)
+                        .append(stringTimeX)
                         .append(" segundos.\n");
-                continue;
-            } else if (xWhenY2 == actualTargetX) {
-                finalResult.append("\nObjetivo ")
-                        .append(to_string(j + 1))
-                        .append(" destruido por el ca")
-                        .append(char164)
-                        .append("on ")
-                        .append(canonString)
-                        .append(" en ")
-                        .append(stringTimeY2)
-                        .append(" segundos.\n");
-                continue;
             } else {
                 for (int k = 0; k < 18000; ++k) {
-
 
                     auto k2 = static_cast<double>(k);
                     double actualAngle2 = k2 / 100;
@@ -135,18 +114,10 @@ int main() {
                             actualAngle2 * PI / 180); //Numero convertido a radianes para calcular coseno(Funcionando)
                     double senoAngleSquare2 = pow(senoAngle2, 2); //Cuadrado del seno(Funcionando)
                     double initialSpeedY2 = initialSpeed * senoAngle2; //Velocidad inicial Y  Vo*Sen(a) (Funcionando)
-                    double timeY12 = (-initialSpeed * senoAngle2 + sqrt(
-                            (pow(initialSpeed, 2) * senoAngleSquare2 +
-                             2 * GRAVITY * (actualTargetY - initialPositionY)))) /
-                                     GRAVITY;//(Funcionando)
-                    double timeY22 = -((initialSpeedY2 + sqrt(pow(initialSpeedY2, 2) +
-                                                              2 * GRAVITY * (actualTargetY - initialPositionY))) /
-                                       GRAVITY);
-                    double xWhenY12 = round((initialSpeed * (timeY12) * cosAngle2) +
-                                            initialPositionX);
-                    double xWhenY22 = round((initialSpeed * (timeY22) * cosAngle2) +
-                                            initialPositionX);
-                    if (abs(xWhenY12 - actualTargetX) < 0.5 || abs(xWhenY22 - actualTargetX) < 0.5) {
+                    double initialSpeedX2 = initialSpeed * cosAngle2;
+                    double timeX2 = (actualTargetX-initialPositionX)/initialSpeedX2;//(Funcionando)
+                    double yWhenX2 = round(initialPositionY+initialSpeedY2*timeX2 -0.5 * -GRAVITY* pow(timeX2,2)); //Indica donde se encuentra el proyectil en el eje X cuando pasa por el eje Y indicado
+                    if (yWhenX2 == actualTargetY) {
                         int movedGrades = round(abs(actualAngle - actualAngle2));
                         string stringGrades = to_string(movedGrades);
                         finalResult.append("\nReajuste de ")
