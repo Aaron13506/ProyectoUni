@@ -7,6 +7,34 @@
 
 using namespace std;
 
+double calculateYwhenX(double PI, double GRAVITY, int initialSpeed, int initialPositionX, int initialPositionY,
+                       int actualTargetX, double newActualAngle) {
+    double newSenoAngle = sin(
+            newActualAngle * PI / 180); //Numero convertido a radianes para calcular seno(Funcionando)
+    double newCosAngle = cos(
+            newActualAngle * PI / 180); //Numero convertido a radianes para calcular coseno(Funcionando)
+    double newInitialSpeedY =
+            initialSpeed * newSenoAngle; //Velocidad inicial Y  Vo*Sen(a) (Funcionando)
+    double newInitialSpeedX = initialSpeed * newCosAngle;
+    double newTimeX = (actualTargetX - initialPositionX) / newInitialSpeedX;//(Funcionando)
+    double newYwhenX = round(initialPositionY + newInitialSpeedY * newTimeX - 0.5 * -GRAVITY *
+                                                                              pow(newTimeX,
+                                                                                  2));
+    return newYwhenX;
+}
+
+void requiredGrades(int actualAngle, double actualAngle2) {
+    int movedGrades = round(abs(actualAngle - actualAngle2));
+    string stringGrades = to_string(movedGrades);
+    finalResult.append("\nReajuste de ")
+            .append(stringGrades)
+            .append(" grados requerido en el ca")
+            .append(char164)
+            .append("on ")
+            .append(canonString)
+            .append("\n");
+}
+
 int main() {
     const double PI = M_PI; //Constante PI
     const double GRAVITY = -9.81; //Constante gravedad
@@ -66,13 +94,13 @@ int main() {
                 cout << "Datos de entrada invalidos";
                 return 0;
             }
-            double timeX = (actualTargetX-initialPositionX)/initialSpeedX;//(Funcionando)
+            double timeX = (actualTargetX - initialPositionX) / initialSpeedX;//(Funcionando)
             int roundedTimeX = round(timeX);
             string stringTimeX = to_string(roundedTimeX);
 
-          
 
-            double yWhenX1 = round(initialPositionY+initialSpeedY*timeX -0.5 * -GRAVITY* pow(timeX,2)); //Indica donde se encuentra el proyectil en el eje X cuando pasa por el eje Y indicado
+            double yWhenX1 = round(initialPositionY + initialSpeedY * timeX - 0.5 * -GRAVITY * pow(timeX,
+                                                                                                   2)); //Indica donde se encuentra el proyectil en el eje X cuando pasa por el eje Y indicado
             int roundedWhenX = static_cast<int>(yWhenX1);
             string stringWhenX = to_string(roundedWhenX);
 
@@ -104,31 +132,21 @@ int main() {
                         .append(stringTimeX)
                         .append(" segundos.\n");
             } else {
-                for (int k = 0; k < 18000; ++k) {
-
-                    auto k2 = static_cast<double>(k);
-                    double actualAngle2 = k2 / 100;
-                    double senoAngle2 = sin(
-                            actualAngle2 * PI / 180); //Numero convertido a radianes para calcular seno(Funcionando)
-                    double cosAngle2 = cos(
-                            actualAngle2 * PI / 180); //Numero convertido a radianes para calcular coseno(Funcionando)
-                    double senoAngleSquare2 = pow(senoAngle2, 2); //Cuadrado del seno(Funcionando)
-                    double initialSpeedY2 = initialSpeed * senoAngle2; //Velocidad inicial Y  Vo*Sen(a) (Funcionando)
-                    double initialSpeedX2 = initialSpeed * cosAngle2;
-                    double timeX2 = (actualTargetX-initialPositionX)/initialSpeedX2;//(Funcionando)
-                    double yWhenX2 = round(initialPositionY+initialSpeedY2*timeX2 -0.5 * -GRAVITY* pow(timeX2,2)); //Indica donde se encuentra el proyectil en el eje X cuando pasa por el eje Y indicado
-                    if (yWhenX2 == actualTargetY) {
-                        int movedGrades = round(abs(actualAngle - actualAngle2));
-                        string stringGrades = to_string(movedGrades);
-                        finalResult.append("\nReajuste de ")
-                                .append(stringGrades)
-                                .append(" grados requerido en el ca")
-                                .append(char164)
-                                .append("on ")
-                                .append(canonString)
-                                .append("\n");
-                        break;
+                double newActualAngle = 0;
+                double comparingRange = 10;
+                for (int k = 0; k < 40; ++k) {
+                    double calculateY = calculateYwhenX(PI, GRAVITY, initialSpeed, initialPositionX, initialPositionY,
+                                                        actualTargetX, newActualAngle);
+                    newActualAngle += comparingRange;
+                    double calculateYwith10More = calculateYwhenX(PI, GRAVITY, initialSpeed, initialPositionX,
+                                                                  initialPositionY, actualTargetX, newActualAngle);
+                    if (round(calculateY) == actualTargetY) { requiredGrades(actualAngle, newActualAngle); }
+                    else if (round(calculateYwith10More) == actualTargetY) { requiredGrades(actualAngle,
+                                                                                            newActualAngle +
+                                                                                            comparingRange);
                     }
+                    if (calculateY < actualTargetY && actualTargetY < calculateYwith10More) {
+                        comparingRange = 1;}
                 }
             }
         }
