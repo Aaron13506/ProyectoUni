@@ -7,8 +7,8 @@
 
 using namespace std;
 
-double calculateYwhenX(double PI, double GRAVITY, int initialSpeed, int initialPositionX, int initialPositionY,
-                       int actualTargetX, double newActualAngle) {
+double calcularYcuandoX(double PI, double GRAVITY, int initialSpeed, int initialPositionX, int initialPositionY,
+                        int actualTargetX, double newActualAngle, int objetivoY) {
     double newSenoAngle = sin(
             newActualAngle * PI / 180); //Numero convertido a radianes para calcular seno(Funcionando)
     double newCosAngle = cos(
@@ -23,136 +23,139 @@ double calculateYwhenX(double PI, double GRAVITY, int initialSpeed, int initialP
     return newYwhenX;
 }
 
-void requiredGrades(int actualAngle, double actualAngle2) {
-    int movedGrades = round(abs(actualAngle - actualAngle2));
-    string stringGrades = to_string(movedGrades);
-    finalResult.append("\nReajuste de ")
-            .append(stringGrades)
-            .append(" grados requerido en el ca")
-            .append(char164)
-            .append("on ")
-            .append(canonString)
-            .append("\n");
-}
 
 int main() {
     const double PI = M_PI; //Constante PI
-    const double GRAVITY = -9.81; //Constante gravedad
+    const double GRAVEDAD = -9.81; //Constante gravedad
     const char character164 = static_cast<char>(164); //Permite colocar la letra
     string char164(1, character164);
-    string finalResult;
-    int initialPositionX, initialPositionY, initialSpeed, actualAngle, objectiveQty, actualTargetX, actualTargetY, cannonQty;
-    int canonID = 65;
-    double timeInAir; //Luego se calcula cuanto tarda en caer el suelo según la altura inicial(Funcionando)
-    cin >> cannonQty;
-    for (int i = 0; i < cannonQty; i++) {
-        char canonLetter = static_cast<char>(canonID);
-        string canonString(1, canonLetter);
-        canonID++;
-        cin >> initialPositionX >> initialPositionY;
-        cin >> initialSpeed >> actualAngle;
-        double senoAngle = sin(actualAngle * PI / 180); //Numero convertido a radianes para calcular seno(Funcionando)
-        double cosAngle = cos(actualAngle * PI / 180); //Numero convertido a radianes para calcular coseno(Funcionando)
-        double senoAngleSquare = pow(senoAngle, 2); //Cuadrado del seno(Funcionando)
-        double initialSpeedY = initialSpeed * senoAngle; //Velocidad inicial Y  Vo*Sen(a) (Funcionando)
-        double initialSpeedX = initialSpeed * cosAngle; // Velocidad inicial X Vo*Cos(a) (Funcionando)
-        double maxHeight = -(pow(initialSpeed, 2) * (senoAngleSquare) / (2 * GRAVITY)) +
-                           initialPositionY; //Altura maxima Vo²*Sen²(a)/2*g + Altura inicial (Funcionando)
-        int roundedHeight = static_cast<int>(round(maxHeight));
-        string stringHeight = to_string(roundedHeight);
-        if (initialPositionY == 0) { //Las fórmulas difieren si la posición inicial de Y es 0 o no
-            timeInAir = ((2 * initialSpeed) * senoAngle /
-                         -GRAVITY); //Tiempo de vuelo si la altura es 0  Vo*Sen(a)/g (Funcionando)
+    string resultadoFinal;
+    int posicionInicialX, posicionInicialY, velocidadInicial, anguloRecibido, nroObjetivos, xDeObjetivo, yDeObjetivo, nroCanones;
+    int canonNumberID = 65;
+    double tiempoEnAire; //Luego se calcula cuanto tarda en caer el suelo según la altura inicial(Funcionando)
+    cin >> nroCanones;
+    for (int i = 0; i < nroCanones; i++) {
+        char canonLetterID = static_cast<char>(canonNumberID);
+        string canonStringID(1, canonLetterID);
+        canonNumberID++;
+        cin >> posicionInicialX >> posicionInicialY;
+        cin >> velocidadInicial >> anguloRecibido;
+        double senoAngulo = sin(
+                anguloRecibido * PI / 180); //Numero convertido a radianes para calcular seno(Funcionando)
+        double cosenoAngulo = cos(
+                anguloRecibido * PI / 180); //Numero convertido a radianes para calcular coseno(Funcionando)
+        double cuadradoSenoAngulo = pow(senoAngulo, 2); //Cuadrado del seno(Funcionando)
+        double velocidadInicialY = velocidadInicial * senoAngulo; //Velocidad inicial Y  Vo*Sen(a) (Funcionando)
+        double velocidadInicialX = velocidadInicial * cosenoAngulo; // Velocidad inicial X Vo*Cos(a) (Funcionando)
+        double alturaMaxima = -(pow(velocidadInicial, 2) * (cuadradoSenoAngulo) / (2 * GRAVEDAD)) +
+                              posicionInicialY; //Altura maxima Vo²*Sen²(a)/2*g + Altura inicial (Funcionando)
+        int alturaRedondeada = static_cast<int>(round(alturaMaxima));
+        string stringAltura = to_string(alturaRedondeada);
+        if (posicionInicialY == 0) { //Las fórmulas difieren si la posición inicial de Y es 0 o no
+            tiempoEnAire = ((2 * velocidadInicial) * senoAngulo /
+                            -GRAVEDAD); //Tiempo de vuelo si la altura es 0  Vo*Sen(a)/g (Funcionando)
 
         } else {
-            timeInAir = (initialSpeed * senoAngle +
-                         sqrt((pow(initialSpeed, 2) * senoAngleSquare + 2 * -GRAVITY * initialPositionY))) /
-                        -GRAVITY; //  (Funcionando)
+            tiempoEnAire = (velocidadInicial * senoAngulo +
+                            sqrt((pow(velocidadInicial, 2) * cuadradoSenoAngulo + 2 * -GRAVEDAD * posicionInicialY))) /
+                           -GRAVEDAD; //  (Funcionando)
         }
-        int roundedTimeInAir = static_cast<int>(round(timeInAir));
-        string stringTimeInAir = to_string(roundedTimeInAir);
-        finalResult.append("\nLos proyectiles del ca")
+        int tiempoEnAireRedondeado = static_cast<int>(round(tiempoEnAire));
+        string stringTiempoEnAire = to_string(tiempoEnAireRedondeado);
+        resultadoFinal.append("\nLos proyectiles del ca")
                 .append(char164)
                 .append("on ")
-                .append(canonString)
+                .append(canonStringID)
                 .append(" subiran hasta ")
-                .append(stringHeight)
+                .append(stringAltura)
                 .append(" metros antes de comenzar a caer.\n")
                 .append("Estos impactaran contra el suelo pasados ")
-                .append(stringTimeInAir)
+                .append(stringTiempoEnAire)
                 .append(" segundos luego de ser disparados.\n");
-        cin >> objectiveQty;
-        if (initialPositionY > 50 || initialSpeed > 500 || cannonQty > 26 || actualAngle > 180 || actualAngle < 0 ||
-            cannonQty < 1 ||
-            initialSpeed < 1 || initialPositionY < 0 || objectiveQty < 1) {
-            cout << "Datos de entrada invalidos";
+        cin >> nroObjetivos;
+        if (posicionInicialY > 50 || velocidadInicial > 500 || nroCanones > 26 || anguloRecibido > 180 ||
+            anguloRecibido < 0 ||
+            nroCanones < 1 ||
+            velocidadInicial < 1 || posicionInicialY < 0 || nroObjetivos < 1) {
+            cout << "\nDatos de entrada invalidos\n";
             return 0;
         }
-        for (int j = 0; j < objectiveQty; ++j) {
-            cin >> actualTargetX >> actualTargetY;
-            if (actualTargetY < 0) {
-                cout << "Datos de entrada invalidos";
+        for (int j = 0; j < nroObjetivos; ++j) {
+            cin >> xDeObjetivo >> yDeObjetivo;
+            if (yDeObjetivo < 0) {
+                cout << "\nDatos de entrada invalidos\n";
                 return 0;
             }
-            double timeX = (actualTargetX - initialPositionX) / initialSpeedX;//(Funcionando)
-            int roundedTimeX = round(timeX);
-            string stringTimeX = to_string(roundedTimeX);
+            double tiempoX = (xDeObjetivo - posicionInicialX) / velocidadInicialX;//(Funcionando)
+            int tiempoXRedondeado = round(tiempoX);
+            string stringTiempoX = to_string(tiempoXRedondeado);
 
 
-            double yWhenX1 = round(initialPositionY + initialSpeedY * timeX - 0.5 * -GRAVITY * pow(timeX,
-                                                                                                   2)); //Indica donde se encuentra el proyectil en el eje X cuando pasa por el eje Y indicado
-            int roundedWhenX = static_cast<int>(yWhenX1);
-            string stringWhenX = to_string(roundedWhenX);
+            double yCuandoX = calcularYcuandoX(PI, GRAVEDAD, velocidadInicial, posicionInicialX, posicionInicialY,
+                                               xDeObjetivo, anguloRecibido, yDeObjetivo);
+            int yCuandoXRedondeado = static_cast<int>(yCuandoX);
+            string stringYCuandoX = to_string(yCuandoXRedondeado);
 
-            if (actualTargetX == initialPositionX && actualTargetY == initialPositionY) {
-                finalResult.append("\nCa")
+            if (xDeObjetivo == posicionInicialX && yDeObjetivo == posicionInicialY) {
+                resultadoFinal.append("\nCa")
                         .append(char164)
-                        .append("on destruido");
+                        .append("on destruido\n");
 
                 break;
-            }
-            if (actualTargetX == initialPositionX && actualTargetY < initialPositionY) {
-                finalResult.append("\nEnemigos en las murallas");
+            } else if (xDeObjetivo == posicionInicialX && yDeObjetivo < posicionInicialY) {
+                resultadoFinal.append("\nEnemigos en las murallas\n");
 
-                continue;
-            }
-            if ((actualTargetX > initialPositionX && actualAngle > 90) ||
-                (actualTargetX < initialPositionX && actualAngle < 90)) {
-                finalResult.append("\nPosicion comprometida");
-                continue;
-            }
-            if (yWhenX1 == actualTargetY) {
-                finalResult.append("\nObjetivo ")
+
+            } else if ((xDeObjetivo > posicionInicialX && anguloRecibido > 90) ||
+                       (xDeObjetivo < posicionInicialX && anguloRecibido < 90)) {
+                resultadoFinal.append("\nPosicion comprometida\n");
+            } else if (yCuandoX == yDeObjetivo) {
+                resultadoFinal.append("\nObjetivo ")
                         .append(to_string(j + 1))
                         .append(" destruido por el ca")
                         .append(char164)
                         .append("on ")
-                        .append(canonString)
+                        .append(canonStringID)
                         .append(" en ")
-                        .append(stringTimeX)
+                        .append(stringTiempoX)
                         .append(" segundos.\n");
             } else {
-                double newActualAngle = 0;
-                double comparingRange = 10;
+                double anguloInicial = 0;
+                double anguloFinal;
+                double rangoDeComparacion = 10;
+                double anguloFuncional = 0;
                 for (int k = 0; k < 40; ++k) {
-                    double calculateY = calculateYwhenX(PI, GRAVITY, initialSpeed, initialPositionX, initialPositionY,
-                                                        actualTargetX, newActualAngle);
-                    newActualAngle += comparingRange;
-                    double calculateYwith10More = calculateYwhenX(PI, GRAVITY, initialSpeed, initialPositionX,
-                                                                  initialPositionY, actualTargetX, newActualAngle);
-                    if (round(calculateY) == actualTargetY) { requiredGrades(actualAngle, newActualAngle); }
-                    else if (round(calculateYwith10More) == actualTargetY) { requiredGrades(actualAngle,
-                                                                                            newActualAngle +
-                                                                                            comparingRange);
-                    }
-                    if (calculateY < actualTargetY && actualTargetY < calculateYwith10More) {
-                        comparingRange = 1;}
+
+                    anguloFinal = anguloInicial + rangoDeComparacion;
+                    double calculoConAnguloInicial = calcularYcuandoX(PI, GRAVEDAD, velocidadInicial, posicionInicialX,
+                                                                      posicionInicialY,
+                                                                      xDeObjetivo, anguloInicial, yDeObjetivo);
+                    double calculoConAnguloFinal = calcularYcuandoX(PI, GRAVEDAD, velocidadInicial, posicionInicialX,
+                                                                    posicionInicialY, xDeObjetivo, anguloFinal,
+                                                                    yDeObjetivo);
+                    if (calculoConAnguloInicial == yDeObjetivo) { anguloFuncional = round(anguloInicial); }
+                    if (calculoConAnguloFinal == yDeObjetivo) { anguloFuncional = round(anguloFinal); }
+                    if (calculoConAnguloInicial == yDeObjetivo || calculoConAnguloFinal == yDeObjetivo) {
+                        int movedGrades = round(abs(anguloRecibido - anguloFuncional));
+                        string stringGrades = to_string(movedGrades);
+                        resultadoFinal.append("\nReajuste de ")
+                                .append(stringGrades)
+                                .append(" grados requerido en el ca")
+                                .append(char164)
+                                .append("on ")
+                                .append(canonStringID)
+                                .append("\n");
+                        break;
+                    } else if (calculoConAnguloInicial < yDeObjetivo && yDeObjetivo < calculoConAnguloFinal) {
+                        if (rangoDeComparacion == 10) { rangoDeComparacion = 1; }
+                        else if (rangoDeComparacion == 1) { rangoDeComparacion = 0.1; }
+                        else if (rangoDeComparacion == 0.1) { rangoDeComparacion = 0.01; }
+
+                    } else { anguloInicial += rangoDeComparacion; }
                 }
             }
         }
     }
-    cout << finalResult;
-    cout << endl;
+    cout << resultadoFinal;
     return 0;
-
 }
