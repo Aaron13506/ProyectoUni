@@ -45,7 +45,6 @@ int main() {
         double cosenoAngulo = cos(
                 anguloRecibido * PI / 180); //Numero convertido a radianes para calcular coseno(Funcionando)
         double cuadradoSenoAngulo = pow(senoAngulo, 2); //Cuadrado del seno(Funcionando)
-        double velocidadInicialY = velocidadInicial * senoAngulo; //Velocidad inicial Y  Vo*Sen(a) (Funcionando)
         double velocidadInicialX = velocidadInicial * cosenoAngulo; // Velocidad inicial X Vo*Cos(a) (Funcionando)
         double alturaMaxima = -(pow(velocidadInicial, 2) * (cuadradoSenoAngulo) / (2 * GRAVEDAD)) +
                               posicionInicialY; //Altura maxima Vo²*Sen²(a)/2*g + Altura inicial (Funcionando)
@@ -87,7 +86,7 @@ int main() {
                 return 0;
             }
             double tiempoX = (xDeObjetivo - posicionInicialX) / velocidadInicialX;//(Funcionando)
-            int tiempoXRedondeado = round(tiempoX);
+            int tiempoXRedondeado = static_cast<int>(round(tiempoX));
             string stringTiempoX = to_string(tiempoXRedondeado);
 
 
@@ -121,10 +120,11 @@ int main() {
                         .append(" segundos.\n");
             } else {
                 double anguloInicial = 0;
+                if(anguloRecibido>90){anguloInicial=90;}
                 double anguloFinal;
                 double rangoDeComparacion = 10;
                 double anguloFuncional = 0;
-                for (int k = 0; k < 40; ++k) {
+                for (int k = 0; k < 50; ++k) {
 
                     anguloFinal = anguloInicial + rangoDeComparacion;
                     double calculoConAnguloInicial = calcularYcuandoX(PI, GRAVEDAD, velocidadInicial, posicionInicialX,
@@ -136,7 +136,7 @@ int main() {
                     if (calculoConAnguloInicial == yDeObjetivo) { anguloFuncional = round(anguloInicial); }
                     if (calculoConAnguloFinal == yDeObjetivo) { anguloFuncional = round(anguloFinal); }
                     if (calculoConAnguloInicial == yDeObjetivo || calculoConAnguloFinal == yDeObjetivo) {
-                        int movedGrades = round(abs(anguloRecibido - anguloFuncional));
+                        int movedGrades = static_cast<int>(round(abs(anguloRecibido - anguloFuncional)));
                         string stringGrades = to_string(movedGrades);
                         resultadoFinal.append("\nReajuste de ")
                                 .append(stringGrades)
