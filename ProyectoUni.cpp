@@ -72,10 +72,11 @@ int main() {
                 .append(stringTiempoEnAire)
                 .append(" segundos luego de ser disparados.\n");
         cin >> nroObjetivos;
-        if (posicionInicialY > 50 || velocidadInicial > 500 || nroCanones > 26 || anguloRecibido > 180 ||
-            anguloRecibido < 0 ||
-            nroCanones < 1 ||
-            velocidadInicial < 1 || posicionInicialY < 0 || nroObjetivos < 1) {
+        if (posicionInicialY > 50 || posicionInicialY < 0
+            || velocidadInicial > 500 || velocidadInicial < 1
+            || anguloRecibido > 180 || anguloRecibido < 0 ||
+            nroCanones < 1 || nroCanones > 26 ||
+            nroObjetivos < 1) {
             cout << "\nDatos de entrada invalidos\n";
             return 0;
         }
@@ -96,9 +97,13 @@ int main() {
             string stringYCuandoX = to_string(yCuandoXRedondeado);
 
             if (xDeObjetivo == posicionInicialX && yDeObjetivo == posicionInicialY) {
+                for (int a = j + 1; a < nroObjetivos; ++a) {
+                    cin >> xDeObjetivo >> yDeObjetivo;
+                }
                 resultadoFinal.append("\nCa")
                         .append(char164)
                         .append("on destruido\n");
+
 
                 break;
             } else if (xDeObjetivo == posicionInicialX && yDeObjetivo < posicionInicialY) {
@@ -120,12 +125,11 @@ int main() {
                         .append(" segundos.\n");
             } else {
                 double anguloInicial = 0;
-                if(anguloRecibido>90){anguloInicial=90;}
+                if (anguloRecibido > 90) { anguloInicial = 90; }
                 double anguloFinal;
                 double rangoDeComparacion = 10;
                 double anguloFuncional = 0;
-                for (int k = 0; k < 50; ++k) {
-
+                for (int k = 0; k < 70; ++k) {
                     anguloFinal = anguloInicial + rangoDeComparacion;
                     double calculoConAnguloInicial = calcularYcuandoX(PI, GRAVEDAD, velocidadInicial, posicionInicialX,
                                                                       posicionInicialY,
@@ -133,9 +137,10 @@ int main() {
                     double calculoConAnguloFinal = calcularYcuandoX(PI, GRAVEDAD, velocidadInicial, posicionInicialX,
                                                                     posicionInicialY, xDeObjetivo, anguloFinal,
                                                                     yDeObjetivo);
-                    if (calculoConAnguloInicial == yDeObjetivo) { anguloFuncional = round(anguloInicial); }
-                    if (calculoConAnguloFinal == yDeObjetivo) { anguloFuncional = round(anguloFinal); }
+                    if (calculoConAnguloInicial == yDeObjetivo) {anguloFuncional = round(anguloInicial);}
+                    else if (calculoConAnguloFinal == yDeObjetivo) {anguloFuncional = round(anguloFinal);}
                     if (calculoConAnguloInicial == yDeObjetivo || calculoConAnguloFinal == yDeObjetivo) {
+
                         int movedGrades = static_cast<int>(round(abs(anguloRecibido - anguloFuncional)));
                         string stringGrades = to_string(movedGrades);
                         resultadoFinal.append("\nReajuste de ")
@@ -150,7 +155,9 @@ int main() {
                         if (rangoDeComparacion == 10) { rangoDeComparacion = 1; }
                         else if (rangoDeComparacion == 1) { rangoDeComparacion = 0.1; }
                         else if (rangoDeComparacion == 0.1) { rangoDeComparacion = 0.01; }
-
+                        else if (rangoDeComparacion == 0.01) { rangoDeComparacion = 0.001; }
+                        else if (rangoDeComparacion == 0.001) { rangoDeComparacion = 0.0001; }
+                        else if (rangoDeComparacion == 0.0001) { rangoDeComparacion = 0.00001; }
                     } else { anguloInicial += rangoDeComparacion; }
                 }
             }
