@@ -17,10 +17,10 @@ double calcularYcuandoX(double PI, double GRAVITY, int initialSpeed, int initial
             initialSpeed * newSenoAngle; //Velocidad inicial Y  Vo*Sen(a) (Funcionando)
     double newInitialSpeedX = initialSpeed * newCosAngle;
     double newTimeX = (actualTargetX - initialPositionX) / newInitialSpeedX;//(Funcionando)
-    double newYwhenX = round(initialPositionY + newInitialSpeedY * newTimeX - 0.5 * -GRAVITY *
+    return round(initialPositionY + newInitialSpeedY * newTimeX - 0.5 * -GRAVITY *
                                                                               pow(newTimeX,
                                                                                   2));
-    return newYwhenX;
+
 }
 
 
