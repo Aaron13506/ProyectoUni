@@ -4,8 +4,8 @@
 #include "iostream"
 #include "cmath"
 #include "cstdlib"
-
 using namespace std;
+
 
 double calcularYcuandoX(double PI, double GRAVITY, int initialSpeed, int initialPositionX, int initialPositionY,
                         int actualTargetX, double newActualAngle) {
@@ -25,11 +25,17 @@ double calcularYcuandoX(double PI, double GRAVITY, int initialSpeed, int initial
 
 
 int main() {
+    string char164;
+    string resultadoFinal;
+#ifdef __linux__
+    setlocale(LC_ALL, "spanish");
+     char164 = "ñ"; //Permite colocar la letra
+#elif _WIN32
+    const char character164 = static_cast<char>(164); //Permite colocar la letra
+    char164= string(1, character164);
+#endif
     const double PI = M_PI; //Constante PI
     const double GRAVEDAD = -9.81; //Constante gravedad
-    const char character164 = static_cast<char>(164); //Permite colocar la letra
-    string char164(1, character164);
-    string resultadoFinal;
     int posicionInicialX, posicionInicialY, velocidadInicial, anguloRecibido, nroObjetivos, xDeObjetivo, yDeObjetivo, nroCanones;
     bool invalidData = false;
     int canonNumberID = 65;
