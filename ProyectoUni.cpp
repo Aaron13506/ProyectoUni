@@ -4,6 +4,7 @@
 #include "iostream"
 #include "cmath"
 #include "cstdlib"
+
 using namespace std;
 
 
@@ -18,35 +19,37 @@ double calcularYcuandoX(double PI, double GRAVITY, int initialSpeed, int initial
     double newInitialSpeedX = initialSpeed * newCosAngle;
     double newTimeX = (actualTargetX - initialPositionX) / newInitialSpeedX;//(Funcionando)
     return round(initialPositionY + newInitialSpeedY * newTimeX - 0.5 * -GRAVITY *
-                                                                              pow(newTimeX,
-                                                                                  2));
+                                                                  pow(newTimeX,
+                                                                      2));
 
 }
 
 
 int main() {
-    string char164;
-    string resultadoFinal;
-#ifdef __linux__
     setlocale(LC_ALL, "spanish");
-     char164 = "ñ"; //Permite colocar la letra
-#elif _WIN32
-    const char character164 = static_cast<char>(164); //Permite colocar la letra
-    char164= string(1, character164);
-#endif
+    string char164 = "ñ"; //Permite colocar la letra
     const double PI = M_PI; //Constante PI
     const double GRAVEDAD = -9.81; //Constante gravedad
     int posicionInicialX, posicionInicialY, velocidadInicial, anguloRecibido, nroObjetivos, xDeObjetivo, yDeObjetivo, nroCanones;
-    bool invalidData = false;
     int canonNumberID = 65;
     double tiempoEnAire; //Luego se calcula cuanto tarda en caer el suelo según la altura inicial(Funcionando)
     cin >> nroCanones;
+    if (nroCanones > 26 || nroCanones < 1) {
+        cout << "\nDatos de entrada invalidos\n";
+        return 0;
+    }
     for (int i = 0; i < nroCanones; i++) {
         char canonLetterID = static_cast<char>(canonNumberID);
         string canonStringID(1, canonLetterID);
         canonNumberID++;
         cin >> posicionInicialX >> posicionInicialY;
         cin >> velocidadInicial >> anguloRecibido;
+        if (posicionInicialY > 50 || posicionInicialY < 0
+            || velocidadInicial > 500 || velocidadInicial < 1
+            || anguloRecibido > 180 || anguloRecibido < 0) {
+            cout << "\nDatos de entrada invalidos\n";
+            return 0;
+        }
         double senoAngulo = sin(
                 anguloRecibido * PI / 180); //Numero convertido a radianes para calcular seno(Funcionando)
         double cosenoAngulo = cos(
@@ -68,27 +71,21 @@ int main() {
         }
         int tiempoEnAireRedondeado = static_cast<int>(round(tiempoEnAire));
         string stringTiempoEnAire = to_string(tiempoEnAireRedondeado);
-        resultadoFinal.append("\nLos proyectiles del ca")
-                .append(char164)
-                .append("on ")
-                .append(canonStringID)
-                .append(" subiran hasta ")
-                .append(stringAltura)
-                .append(" metros antes de comenzar a caer.\n")
-                .append("Estos impactaran contra el suelo pasados ")
-                .append(stringTiempoEnAire)
-                .append(" segundos luego de ser disparados.\n");
+        cout << ("\nLos proyectiles del ca") << (char164)
+             << ("on ")
+             << (canonStringID)
+             << (" subiran hasta ")
+             << (stringAltura)
+             << (" metros antes de comenzar a caer.\n")
+             << ("Estos impactaran contra el suelo pasados ")
+             << (stringTiempoEnAire)
+             << (" segundos luego de ser disparados.\n");
         cin >> nroObjetivos;
-        if (posicionInicialY > 50 || posicionInicialY < 0
-            || velocidadInicial > 500 || velocidadInicial < 1
-            || anguloRecibido > 180 || anguloRecibido < 0 ||
-            nroCanones > 26) {
-            invalidData = true;
-        }
         for (int j = 0; j < nroObjetivos; ++j) {
             cin >> xDeObjetivo >> yDeObjetivo;
             if (yDeObjetivo < 0) {
-                invalidData = true;
+                cout << "\nDatos de entrada invalidos\n";
+                return 0;
             }
             double tiempoX = (xDeObjetivo - posicionInicialX) / velocidadInicialX;//(Funcionando)
             int tiempoXRedondeado = static_cast<int>(round(tiempoX));
@@ -101,32 +98,25 @@ int main() {
             string stringYCuandoX = to_string(yCuandoXRedondeado);
 
             if (xDeObjetivo == posicionInicialX && yDeObjetivo == posicionInicialY) {
-                resultadoFinal.append("\nCa")
-                        .append(char164)
-                        .append("on destruido\n");
-                for (int a = j + 1; a < nroObjetivos; ++a) {
-                    cin >> xDeObjetivo >> yDeObjetivo;
-                }
-
-
+                cout << ("\nCa") << (char164) << ("on destruido\n");
                 break;
             } else if (xDeObjetivo == posicionInicialX && yDeObjetivo < posicionInicialY) {
-                resultadoFinal.append("\nEnemigos en las murallas\n");
+                cout << ("\nEnemigos en las murallas\n");
 
 
             } else if ((xDeObjetivo > posicionInicialX && anguloRecibido > 90) ||
                        (xDeObjetivo < posicionInicialX && anguloRecibido < 90)) {
-                resultadoFinal.append("\nPosicion comprometida\n");
+                cout << ("\nPosicion comprometida\n");
             } else if (yCuandoX == yDeObjetivo) {
-                resultadoFinal.append("\nObjetivo ")
-                        .append(to_string(j + 1))
-                        .append(" destruido por el ca")
-                        .append(char164)
-                        .append("on ")
-                        .append(canonStringID)
-                        .append(" en ")
-                        .append(stringTiempoX)
-                        .append(" segundos.\n");
+                cout << ("\nObjetivo ")
+                     << (to_string(j + 1))
+                     << (" destruido por el ca")
+                     << (char164)
+                     << ("on ")
+                     << (canonStringID)
+                     << (" en ")
+                     << (stringTiempoX)
+                     << (" segundos.\n");
             } else {
                 double anguloInicial = 0;
                 if (anguloRecibido > 90) { anguloInicial = 180; }
@@ -146,16 +136,16 @@ int main() {
                     if (calculoConAnguloInicial == yDeObjetivo || calculoConAnguloFinal == yDeObjetivo) {
                         int movedGrades = static_cast<int>(round(abs(anguloRecibido - anguloFuncional)));
                         string stringGrades = to_string(movedGrades);
-                        resultadoFinal.append("\nReajuste de ")
-                                .append(stringGrades)
-                                .append(" grados requerido en el ca")
-                                .append(char164)
-                                .append("on ")
-                                .append(canonStringID)
-                                .append("\n");
+                        cout << ("\nReajuste de ")
+                             << (stringGrades)
+                             << (" grados requerido en el ca")
+                             << (char164)
+                             << ("on ")
+                             << (canonStringID)
+                             << ("\n");
                         break;
                     } else if (calculoConAnguloInicial < yDeObjetivo && yDeObjetivo < calculoConAnguloFinal) {
-                        rangoDeComparacion/=10;
+                        rangoDeComparacion /= 10;
                     } else {
                         if (anguloRecibido > 90) { anguloInicial -= rangoDeComparacion; }
                         else { anguloInicial += rangoDeComparacion; }
@@ -164,7 +154,5 @@ int main() {
             }
         }
     }
-    if (invalidData) { cout << "\nDatos de entrada invalidos\n"; }
-    else { cout << resultadoFinal; }
     return 0;
 }
