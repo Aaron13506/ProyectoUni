@@ -71,7 +71,8 @@ int main() {
         }
         int tiempoEnAireRedondeado = static_cast<int>(round(tiempoEnAire));
         string stringTiempoEnAire = to_string(tiempoEnAireRedondeado);
-        cout << ("\nLos proyectiles del ca") << (char164)
+        cout << ("\nLos proyectiles del ca")
+             << (char164)
              << ("on ")
              << (canonStringID)
              << (" subiran hasta ")
@@ -81,6 +82,10 @@ int main() {
              << (stringTiempoEnAire)
              << (" segundos luego de ser disparados.\n");
         cin >> nroObjetivos;
+        if(nroObjetivos<0){
+            cout << "\nDatos de entrada invalidos\n";
+            return 0;
+        }
         for (int j = 0; j < nroObjetivos; ++j) {
             cin >> xDeObjetivo >> yDeObjetivo;
             if (yDeObjetivo < 0) {
@@ -134,7 +139,7 @@ int main() {
                     if (calculoConAnguloInicial == yDeObjetivo) { anguloFuncional = round(anguloInicial); }
                     else if (calculoConAnguloFinal == yDeObjetivo) { anguloFuncional = round(anguloFinal); }
                     if (calculoConAnguloInicial == yDeObjetivo || calculoConAnguloFinal == yDeObjetivo) {
-                        int movedGrades = static_cast<int>(round(abs(anguloRecibido - anguloFuncional)));
+                        int movedGrades = static_cast<int>(abs(anguloRecibido - anguloFuncional));
                         string stringGrades = to_string(movedGrades);
                         cout << ("\nReajuste de ")
                              << (stringGrades)
